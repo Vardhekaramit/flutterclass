@@ -1,161 +1,186 @@
+
+import 'package:demo_widget/notes.dart';
 import 'package:demo_widget/signup.dart';
-import 'package:flutter/gestures.dart';
+import 'package:demo_widget/sqlhelper.dart';
+
+
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+
+
+
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginScreenState extends State<LoginScreen> {
+  List<Map<String, dynamic>>_authintcate = [];
 
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool showpass = true;
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height:double.infinity,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 81),
+      body: Center(
+        child: Form(
+          key: _formKey,
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text("Welcome Back", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 45),),
-                  ),
-
-                  Text("Enter Your credential to login", style: TextStyle(fontWeight: FontWeight.w500,),),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(7.0),
-                        child: TextFormField(
-                          controller: username,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: 25) ,
-                            filled: true,
-                              fillColor: Colors.purple.shade50,
-                              hintText: "Username",
-                              prefixIcon: Icon(Icons.person, color: Colors.black26,),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(11),
-
-                              borderSide: BorderSide(
-                                color: Colors.black38,
-
-                              )
-                            ),
-                             focusedBorder: OutlineInputBorder(
-
-                               borderSide: BorderSide(
-                                 color: Colors.blue,
-                               ),
-                               borderRadius: BorderRadius.circular(21),
-                             )
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  // SizedBox(
-                  //   height: 1,
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.all(7.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 100,),
+                Text('Welcome Back',
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold),),
+                Text('Enter Your credential to login',
+                  style: TextStyle(fontWeight: FontWeight.w500),),
+                SizedBox(height: 50,),
+                SizedBox(
+                  width: 375,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.purple.withOpacity(0.1)
+                    ),
                     child: TextFormField(
-                      controller: password,
+                      controller: _username,
+                      validator: (value){
+                        if(value == null || value.length <= 1 || value.isEmpty){
+                          return "pleas enter a valid user name";
+                        }
+                        return null;
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 25),
-                        hintText: "Password",
-                        filled: true,
-                        fillColor: Colors.purple.shade50,
-
-                          prefixIcon: Icon(Icons.password, color: Colors.black26, ),
-                        enabledBorder: OutlineInputBorder(
-
-                          borderSide: BorderSide(
-
-                            color: Colors.black38,
-                          ),
-                          borderRadius: BorderRadius.circular(11),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.blue,
-                          ),
-                          borderRadius: BorderRadius.circular(21),
-                        )
-                      ),
+                          contentPadding: EdgeInsets.all(22),
+                          label: Text('Username'),
+                          prefixIcon: Icon(Icons.person, color: Colors.grey,),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12))),
                     ),
                   ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Container(
-                    width: 375,
-                    height: 60,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purple,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                          ),
-
-
-                        ),
-                           onPressed: (){
-                          },
-                        child: Text("Login", style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600, color: Colors.white),)),
-                     ),
-                 const SizedBox(
-                   height: 100,
-                 ),
-               const InkWell(
-
-                 child:Text("Forgot password?", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),),
-               ),
-                  const SizedBox(
-                    height: 100,
-                  ),
-                  RichText(
-                      text: TextSpan(
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple,
+                ),
+                SizedBox(height: 10,),
+                SizedBox(
+                  width: 375,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.purple.withOpacity(0.1)
                     ),
-                      children: [
-
-                      TextSpan(text: "Don't have an account?  ",style: TextStyle(fontWeight: FontWeight.normal, color: Colors.black) ),
-
-                      TextSpan(text: "Sign up", recognizer: TapGestureRecognizer() ..onTap = () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Signup()));
-                      }
-                       ),
-                    ],
-
+                    child: TextFormField(
+                      controller: _password,
+                      validator: (pass){
+                        if(pass == null || pass.isEmpty || pass.length < 6){
+                          return "please enter a valid password ";
+                        }
+                        return null;
+            
+                      },
+                      /// for auto validating the input when the user interact with the TextForField
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(22),
+                          label: Text('Password'),
+                          prefixIcon: Icon(Icons.password, color: Colors.grey,),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              showpass ?
+                                  Icons.visibility_off : Icons.visibility
+                            ),
+                            onPressed: (){
+                              setState(() {
+                                showpass = !showpass;
+                              });
+                            },
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      obscureText: showpass,
+                      maxLength: 6,
+            
+                    ),
                   ),
-
-                  )
-
-
-
-                ],
-              ),
+                ),
+                SizedBox(height: 10,),
+                SizedBox(
+                  height: 63,
+                  width: 370,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(Colors.purple)),
+                      onPressed: () {
+                        if(_formKey.currentState!.validate() == true){
+                          _authenticateUser();
+                        }
+                      },
+                      child: Text('Login', style: TextStyle(color: Colors.white),)),
+                ),
+                SizedBox(height: 100,),
+                Flexible(child: Text('Forgot password?', style: TextStyle(
+                    color: Colors.purple, fontWeight: FontWeight.w500),)),
+                Flexible(child: SizedBox(height: 120,)),
+                InkWell(onTap: () {
+                  // _authUser();
+                },
+                  child: Flexible(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignupPage(),));
+                      },
+                      child: RichText(text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: 'Dont have an account?   ' , style: TextStyle(
+                                color: Colors.black)
+            
+                            ),
+                            TextSpan(text: 'Sign Up', style: TextStyle(color: Colors
+                                .purple, fontWeight: FontWeight.w500)),
+                          ]
+                      )),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+  Future<void> _authenticateUser() async {
+    String username = _username.text;
+    String password = _password.text;
+
+    bool isAuthenticated = await SQLHelper.authenticate(username, password);
+
+    if (isAuthenticated) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Notes(),));
+      // successful login
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful!'))
+      );
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+    } else {
+      // failed login
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid username or password'))
+      );
+    }
   }
 }
